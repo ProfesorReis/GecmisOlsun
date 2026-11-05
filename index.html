@@ -8,153 +8,219 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@900&display=swap" rel="stylesheet">
 <style>
-  :root { --bg: #0f0f13; --pink: #ff758c; }
+  :root { --bg: #0f0f13; --pink: #ff758c; --beat: 0.469s; }
   * { box-sizing: border-box; }
   html, body { height: 100%; margin: 0; }
   body {
     font-family: 'Nunito', system-ui, sans-serif;
-    background: radial-gradient(ellipse at 50% 40%, #2a1520 0%, var(--bg) 65%);
+    background: radial-gradient(ellipse at 50% 40%, #3a1230 0%, var(--bg) 68%);
     color: #fff;
     overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 1vh;
-    user-select: none;
-    -webkit-user-select: none;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 0.5vh;
+    padding-bottom: 34px;
+    user-select: none; -webkit-user-select: none;
   }
 
-  #cat {
-    margin: 0;
-    font-family: ui-monospace, 'SFMono-Regular', Menlo, Consolas, 'DejaVu Sans Mono', 'Courier New', monospace;
-    font-weight: 700;
-    font-size: min(1.95vh, 3.7vw);
-    line-height: 1;
-    white-space: pre;
-    text-shadow: 0 0 10px rgba(255,117,140,.35);
+  /* ---------- Arka plan: dönen ışınlar ---------- */
+  #rays {
+    position: fixed; left: 50%; top: 42%;
+    width: 170vmax; height: 170vmax; margin: -85vmax 0 0 -85vmax;
+    background: repeating-conic-gradient(from 0deg,
+      rgba(255,70,130,.22) 0 9deg, rgba(0,0,0,0) 9deg 18deg,
+      rgba(70,200,255,.18) 18deg 27deg, rgba(0,0,0,0) 27deg 36deg,
+      rgba(255,210,70,.18) 36deg 45deg, rgba(0,0,0,0) 45deg 54deg);
+    -webkit-mask-image: radial-gradient(circle, rgba(0,0,0,.18) 0, rgba(0,0,0,.18) 7%, #000 24%, transparent 58%);
+            mask-image: radial-gradient(circle, rgba(0,0,0,.18) 0, rgba(0,0,0,.18) 7%, #000 24%, transparent 58%);
+    animation: spin calc(var(--beat) * 24) linear infinite, hue calc(var(--beat) * 48) linear infinite;
+    z-index: 0; pointer-events: none;
   }
-  #cat .g1 { color: #b9bbc6; }
-  #cat .g2 { color: #858792; }
-  #cat .w  { color: #f7f3ef; }
-  #cat .p  { color: #ff8fab; }
-  #cat .k  { color: #d2c8d2; }
-  #cat .d  { color: #b99aa9; text-shadow: none; }
+  #pulse {
+    position: fixed; inset: 0; z-index: 1; pointer-events: none;
+    background: radial-gradient(circle at 50% 45%, rgba(255,117,140,.28), transparent 55%);
+    animation: pulse var(--beat) ease-in-out infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  @keyframes hue  { to { filter: hue-rotate(360deg); } }
+  @keyframes pulse { 0%,100% { opacity: .25; transform: scale(.96); } 50% { opacity: .9; transform: scale(1.06); } }
+
+  /* ---------- Bayraklar (papel picado) ---------- */
+  #bunting { position: fixed; top: 0; left: 0; right: 0; height: 9vw; max-height: 64px; z-index: 6; pointer-events: none; display: flex; }
+  #bunting::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 2px; background: rgba(255,255,255,.35); }
+  #bunting i {
+    flex: 1; height: 100%; transform-origin: 50% 0;
+    clip-path: polygon(0 0, 100% 0, 100% 62%, 50% 100%, 0 62%);
+    animation: sway calc(var(--beat) * 2) ease-in-out infinite alternate;
+  }
+  @keyframes sway { from { transform: rotate(-7deg); } to { transform: rotate(7deg); } }
+
+  /* ---------- Uçanlar ---------- */
+  #fliers { position: fixed; inset: 0; z-index: 5; pointer-events: none; overflow: hidden; }
+  .fly { position: absolute; left: 0; will-change: transform; animation-timing-function: linear; animation-fill-mode: forwards; }
+  .fly.ltr { animation-name: ltr; }
+  .fly.rtl { animation-name: rtl; }
+  @keyframes ltr { from { transform: translateX(-18vw); } to { transform: translateX(118vw); } }
+  @keyframes rtl { from { transform: translateX(118vw); } to { transform: translateX(-18vw); } }
+  .fly span { display: inline-block; filter: drop-shadow(0 4px 8px rgba(0,0,0,.45)); }
+  .fly .a-spin { animation: rot calc(var(--beat) * 4) linear infinite; }
+  .fly .a-wob  { animation: wob var(--beat) ease-in-out infinite alternate; }
+  .fly .a-bnc  { animation: bnc var(--beat) ease-in-out infinite alternate; }
+  @keyframes rot { to { transform: rotate(360deg); } }
+  @keyframes wob { from { transform: rotate(-28deg) scale(.95); } to { transform: rotate(28deg) scale(1.1); } }
+  @keyframes bnc { from { transform: translateY(14px) scale(1, .88); } to { transform: translateY(-26px) scale(.94, 1.08); } }
+
+  /* ---------- Dansçılar ---------- */
+  .dancer { position: fixed; bottom: 42px; z-index: 8; font-size: clamp(48px, 11vw, 120px); line-height: 1; pointer-events: none;
+            animation: dance calc(var(--beat) * 2) ease-in-out infinite; filter: drop-shadow(0 6px 10px rgba(0,0,0,.5)); }
+  .dancer.l { left: 2vw; }
+  .dancer.r { right: 2vw; animation-delay: calc(var(--beat) * -1); }
+  @keyframes dance {
+    0%   { transform: scaleX(1)  translateY(0)     rotate(-8deg); }
+    25%  { transform: scaleX(1)  translateY(-12%)  rotate(8deg); }
+    49%  { transform: scaleX(1)  translateY(0)     rotate(-8deg); }
+    50%  { transform: scaleX(-1) translateY(0)     rotate(-8deg); }
+    75%  { transform: scaleX(-1) translateY(-12%)  rotate(8deg); }
+    100% { transform: scaleX(-1) translateY(0)     rotate(-8deg); }
+  }
+
+  /* ---------- Bağırışlar ---------- */
+  .shout {
+    position: fixed; z-index: 12; pointer-events: none; white-space: nowrap;
+    font-weight: 900; font-size: clamp(1.5rem, 5.4vw, 3.4rem); letter-spacing: -.01em;
+    -webkit-text-stroke: 5px #1a0a14; paint-order: stroke fill;
+    text-shadow: 0 6px 0 rgba(0,0,0,.35);
+    animation: shout 1.7s cubic-bezier(.2,.9,.3,1.2) forwards;
+  }
+  @keyframes shout {
+    0%   { transform: translateX(var(--from)) scale(.3) rotate(var(--r1)); opacity: 0; }
+    22%  { transform: translateX(0) scale(1.18) rotate(var(--r2)); opacity: 1; }
+    34%  { transform: translateX(0) scale(1) rotate(var(--r2)); }
+    78%  { transform: translateX(0) scale(1.04) rotate(var(--r1)); opacity: 1; }
+    100% { transform: translateX(var(--from)) scale(.6) rotate(var(--r1)); opacity: 0; }
+  }
+
+  /* ---------- Konfeti ---------- */
+  .conf { position: fixed; z-index: 11; pointer-events: none; animation: burst 1.5s ease-out forwards; }
+  @keyframes burst {
+    0%   { transform: translate(0,0) rotate(0); opacity: 1; }
+    35%  { transform: translate(var(--dx), var(--dy)) rotate(calc(var(--rot) * .5)); opacity: 1; }
+    100% { transform: translate(calc(var(--dx) * 1.25), 62vh) rotate(var(--rot)); opacity: 0; }
+  }
+
+  /* ---------- Kedi ---------- */
+  #cat {
+    position: relative; z-index: 10; margin: 0;
+    font-family: ui-monospace, 'SFMono-Regular', Menlo, Consolas, 'DejaVu Sans Mono', 'Courier New', monospace;
+    font-weight: 700; font-size: min(1.75vh, 3.7vw); line-height: 1; white-space: pre;
+    text-shadow: 0 0 3px #000, 0 0 7px #000, 0 0 14px rgba(255,117,140,.45);
+  }
+  #cat .g1 { color: #b9bbc6; } #cat .g2 { color: #858792; } #cat .w { color: #f7f3ef; }
+  #cat .p  { color: #ff8fab; } #cat .k  { color: #d2c8d2; } #cat .d { color: #c9a9b8; text-shadow: none; }
   #cat .y  { color: #ffd37a; text-shadow: 0 0 8px rgba(255,211,122,.7); }
+  #cat .h  { color: #ffb347; text-shadow: 0 0 10px rgba(255,179,71,.5); }
+  #cat .hb { color: #ff4d6d; text-shadow: 0 0 10px rgba(255,77,109,.5); }
   #cat .e  { color: #fff; background: #0b0b10; text-shadow: none; }
 
-  h1 {
-    margin: 0;
-    padding: 0 16px .12em;
-    text-align: center;
-    font-weight: 900;
-    line-height: 1.05;
-    letter-spacing: -0.02em;
-    font-size: clamp(2.6rem, 9vw, 6.5rem);
-    background: linear-gradient(270deg, #ff7eb3, #ff758c, #ffb199, #ff7eb3);
-    background-size: 300% 300%;
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    animation: shift 5s ease infinite, pop 3.2s ease-in-out infinite;
-    filter: drop-shadow(0 4px 14px rgba(255,117,140,.35));
+  /* ---------- Başlık ---------- */
+  #title { position: relative; z-index: 10; margin: 0; padding: 0 12px .1em; text-align: center; font-weight: 900; line-height: 1.04;
+           letter-spacing: -0.02em; font-size: clamp(2.5rem, 9vw, 6.3rem); }
+  #title .word { display: inline-block; white-space: nowrap; }
+  #title .ch {
+    display: inline-block; color: #ff4d8d;
+    text-shadow: 0 4px 0 rgba(0,0,0,.45), 0 0 22px currentColor;
+    animation: hueText calc(var(--beat) * 8) linear infinite, wave var(--beat) ease-in-out infinite alternate;
   }
-  @keyframes shift { 0%,100% { background-position: 0% 50% } 50% { background-position: 100% 50% } }
-  @keyframes pop { 0%,100% { transform: scale(1) } 50% { transform: scale(1.03) } }
+  @keyframes hueText { 0% { color:#ff4d8d } 20% { color:#ff9f43 } 40% { color:#ffe34d } 60% { color:#4dff9f } 80% { color:#4dc8ff } 100% { color:#ff4d8d } }
+  @keyframes wave { from { transform: translateY(0) rotate(-3deg) scale(1); } to { transform: translateY(-9px) rotate(3deg) scale(1.05); } }
 
-  .heart {
-    position: fixed;
-    bottom: -40px;
-    pointer-events: none;
-    color: var(--pink);
-    opacity: 0;
-    animation: rise linear forwards;
-    text-shadow: 0 0 12px rgba(255,117,140,.6);
-  }
+  /* ---------- Kayan yazı ---------- */
+  #marquee { position: fixed; left: 0; right: 0; bottom: 0; height: 34px; z-index: 14; overflow: hidden;
+             background: linear-gradient(90deg, #ff4d8d, #ff9f43, #ffe34d, #4dff9f, #4dc8ff, #c84dff); display: flex; align-items: center; }
+  #marquee .track { display: flex; white-space: nowrap; animation: marq 16s linear infinite; }
+  #marquee .track span { font-weight: 900; font-size: 15px; color: #1a0a14; padding-right: 2.2em; letter-spacing: .04em; }
+  @keyframes marq { to { transform: translateX(-50%); } }
+
+  /* ---------- Kalpler ---------- */
+  .heart { position: fixed; bottom: -40px; pointer-events: none; color: var(--pink); opacity: 0; z-index: 7;
+           animation: rise linear forwards; text-shadow: 0 0 12px rgba(255,117,140,.6); }
   @keyframes rise {
     0% { transform: translateY(0) translateX(0) scale(.6); opacity: 0 }
     10% { opacity: .85 }
     100% { transform: translateY(-110vh) translateX(var(--dx)) scale(1.1); opacity: 0 }
   }
 
-
-  #start {
-    position: fixed; inset: 0; z-index: 50;
-    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 22px;
-    background: radial-gradient(ellipse at 50% 40%, #2a1520 0%, #0f0f13 70%);
-    cursor: pointer; transition: opacity .6s ease, visibility .6s;
-  }
+  /* ---------- Açılış ekranı ve ses düğmesi ---------- */
+  #start { position: fixed; inset: 0; z-index: 100; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 22px;
+           background: radial-gradient(ellipse at 50% 40%, #3a1230 0%, #0f0f13 70%); cursor: pointer; transition: opacity .5s ease, visibility .5s; }
   #start.hide { opacity: 0; visibility: hidden; }
-  #start .big {
-    font-weight: 900; font-size: clamp(1.6rem, 6vw, 3rem); text-align: center; padding: 0 20px; line-height: 1.15;
-    background: linear-gradient(270deg, #ff7eb3, #ff758c, #ffb199, #ff7eb3); background-size: 300% 300%;
-    -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
-    animation: shift 5s ease infinite;
-  }
-  #start .btn {
-    font: 900 1.1rem 'Nunito', system-ui, sans-serif; color: #fff; letter-spacing: .04em;
-    padding: 14px 34px; border-radius: 999px; border: 2px solid rgba(255,117,140,.7);
-    background: rgba(255,117,140,.12); box-shadow: 0 0 24px rgba(255,117,140,.35);
-    animation: beat 1.6s ease-in-out infinite;
-  }
-  @keyframes beat { 0%,100% { transform: scale(1) } 50% { transform: scale(1.06) } }
-  #mute {
-    position: fixed; right: 16px; bottom: 16px; z-index: 40;
-    width: 44px; height: 44px; border-radius: 50%; cursor: pointer;
-    border: 1.5px solid rgba(255,117,140,.6); background: rgba(15,15,19,.6); color: #ff9db4;
-    font: 900 18px ui-monospace, Menlo, Consolas, monospace; display: none;
-  }
-  #mute.on { display: block; }
-  #mute.off { color: #7d6a74; border-color: rgba(255,255,255,.2); }
+  #start .big { font-weight: 900; font-size: clamp(1.8rem, 7vw, 3.4rem); text-align: center; padding: 0 20px; line-height: 1.1;
+                background: linear-gradient(270deg, #ff7eb3, #ffe34d, #4dff9f, #4dc8ff, #ff7eb3); background-size: 400% 400%;
+                -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; animation: shiftbg 4s ease infinite; }
+  @keyframes shiftbg { 0%,100% { background-position: 0% 50% } 50% { background-position: 100% 50% } }
+  #start .btn { font: 900 1.1rem 'Nunito', system-ui, sans-serif; color: #fff; letter-spacing: .04em; padding: 14px 34px; border-radius: 999px;
+                border: 2px solid rgba(255,117,140,.8); background: rgba(255,117,140,.14); box-shadow: 0 0 26px rgba(255,117,140,.4);
+                animation: beatbtn 1.2s ease-in-out infinite; }
+  @keyframes beatbtn { 0%,100% { transform: scale(1) } 50% { transform: scale(1.08) } }
+  #mute { position: fixed; right: 12px; top: calc(9vw + 8px); z-index: 60; width: 42px; height: 42px; border-radius: 50%; cursor: pointer;
+          border: 1.5px solid rgba(255,117,140,.7); background: rgba(15,15,19,.65); color: #ff9db4; font: 900 18px ui-monospace, Menlo, Consolas, monospace; display: none; }
+  #mute.on { display: block; } #mute.off { color: #7d6a74; border-color: rgba(255,255,255,.2); }
 
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation: none !important; }
+    #rays, #pulse, #fliers { display: none; }
   }
 </style>
 </head>
 <body>
 
+<div id="rays"></div>
+<div id="pulse"></div>
+<div id="bunting"></div>
+<div id="fliers"></div>
+<div class="dancer l">💃</div>
+<div class="dancer r">🕺</div>
+
 <div id="start" role="button" tabindex="0">
-  <div class="big">Sevgilim, sana küçük<br>bir sürprizim var</div>
+  <div class="big">¡SORPRESA!<br>Sevgilim sana bir şey var</div>
   <div class="btn">Dokun ve aç</div>
 </div>
 <button id="mute" aria-label="Sesi aç/kapat">&#9835;</button>
 <audio id="bgm" src="sarki.mp3" loop preload="auto"></audio>
 
-<pre id="cat" role="img" aria-label="Zıplayan sevimli kedi"></pre>
-<h1>Geçmiş Olsun<br>Sevgilim</h1>
+<pre id="cat" role="img" aria-label="Sombrero takmış zıplayan kedi"></pre>
+<h1 id="title" aria-label="Geçmiş Olsun Sevgilim"><span class="word">Geçmiş</span> <span class="word">Olsun</span><br><span class="word">Sevgilim</span></h1>
+
+<div id="marquee"><div class="track" id="track"></div></div>
 
 <script>
-/* ---------- Izgara ve sabitler ---------- */
-const W = 41, H = 28;       // sütun, satır
-const CX = 20;              // kedinin yatay merkezi
-const BASE = 26;            // zemin çizgisi (ayakların altı), gölge bu satırda
+/* =====================================================
+   AYARLAR
+   BPM: şarkının temposu. Kedinin zıplaması, ışınlar ve
+   başlık bu hıza uyar. Test için adres sonuna ?bpm=140
+   ekleyip deneyebilirsin. Kalıcı yapmak için aşağıdaki
+   128 sayısını değiştir.
+   ===================================================== */
+const DEFAULT_BPM = 123.7;
+const BPM = Math.min(220, Math.max(60, +new URLSearchParams(location.search).get('bpm') || DEFAULT_BPM));
+document.documentElement.style.setProperty('--beat', (60 / BPM) + 's');
+const REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-/* ---------- Sprite ayrıştırıcı ----------
-   {p} pembe, {e} göz, {a} otomatik (karaktere göre renk). Boşluk = saydam. */
+/* ---------- ASCII kedi motoru ---------- */
+const W = 41, H = 31, CX = 20, BASE = 29;
+
 const AUTO = { '#':'g1','@':'g1','%':'g2','&':'g2','/':'g2','\\':'g2','|':'g2','_':'g2','-':'g2' };
-
 function parse(s) {
-  const out = [];
-  let cur = null;
+  const out = []; let cur = null;
   for (let i = 0; i < s.length; i++) {
-    if (s[i] === '{') {
-      const j = s.indexOf('}', i);
-      const t = s.slice(i + 1, j);
-      cur = (t === 'a') ? null : t;
-      i = j;
-      continue;
-    }
+    if (s[i] === '{') { const j = s.indexOf('}', i); const t = s.slice(i + 1, j); cur = (t === 'a') ? null : t; i = j; continue; }
     out.push({ ch: s[i], c: cur || AUTO[s[i]] || 'w' });
   }
   return out;
 }
 const sprite = rows => rows.map(parse);
-
 const MIRROR = { '/':'\\', '\\':'/', '(':')', ')':'(', '<':'>', '>':'<' };
 const mirror = rows => rows.map(r => r.slice().reverse().map(c => ({ ch: MIRROR[c.ch] || c.ch, c: c.c })));
 
-/* ---------- Parçalar ---------- */
 function head(eL, eR, m) {
   return sprite([
     "  /\\         /\\  ",
@@ -166,7 +232,6 @@ function head(eL, eR, m) {
     "  \\___________/  "
   ]);
 }
-
 function torso(n) {
   const f = (i, len) => { let s = ''; for (let k = 0; k < len; k++) s += ((i + k) % 2 ? '%' : '#'); return s; };
   const rows = [];
@@ -176,7 +241,6 @@ function torso(n) {
   rows.push(" \\_________/ ");
   return sprite(rows);
 }
-
 const LEGS = {
   stand:   sprite(["  |#|   |#|  ", "  |%|   |%|  ", " (ooo) (ooo) "]),
   crouch1: sprite(["  /#\\   /#\\  ", "(ooo)   (ooo)"]),
@@ -185,44 +249,39 @@ const LEGS = {
   split:   sprite(["  /#|   |#\\  ", " /#/     \\#\\ ", "(o/       \\o)"]),
   tuck:    sprite([" /##\\   /##\\ ", "(ooo)   (ooo)"])
 };
-
 const ARMS = {
   down: { L: sprite(["#%", "%#", "#%", "oo"]), dx: -2, dy: 1 },
   up:   { L: sprite(["oo   ", " #%  ", "  %# ", "   #%"]), dx: -5, dy: -2 },
   out:  { L: sprite(["oo%#%", "  #%#"]), dx: -5, dy: 1 }
 };
 for (const k in ARMS) ARMS[k].R = mirror(ARMS[k].L);
-
 const TAIL = {
   up:   sprite(["   OO", "  %#", " #%", "%#"]),
   out:  sprite(["", "    OO", " %#%# ", "%#%"]),
   down: sprite(["", "", "", "%#%#%OO"])
 };
-
 const WHISK_L = sprite(["==-", "~=-"]).map(r => r.map(c => ({ ch: c.ch, c: 'k' })));
 const WHISK_R = sprite(["-==", "-=~"]).map(r => r.map(c => ({ ch: c.ch, c: 'k' })));
 
-/* ---------- Çizim yardımcıları ---------- */
+/* Sombrero (genişlik 25) */
+const HAT = sprite([
+  "        {h}_.-'''-._        ",
+  "       {h}/{hb}=o=o=o=o={h}\\       ",
+  "  {h}_.--'''''''''''''--._  ",
+  "{h}(_______________________)"
+]);
+
 function put(g, spr, x, y) {
   for (let r = 0; r < spr.length; r++)
     for (let c = 0; c < spr[r].length; c++) {
-      const cell = spr[r][c];
-      const gx = x + c, gy = y + r;
+      const cell = spr[r][c], gx = x + c, gy = y + r;
       if (cell.ch !== ' ' && gy >= 0 && gy < H && gx >= 0 && gx < W) g[gy][gx] = cell;
     }
 }
-function dot(g, ch, c, x, y) {
-  if (x >= 0 && x < W && y >= 0 && y < H) g[y][x] = { ch, c };
-}
-function text(g, s, c, x, y) {
-  for (let i = 0; i < s.length; i++) dot(g, s[i], c, x + i, y);
-}
+function dot(g, ch, c, x, y) { if (x >= 0 && x < W && y >= 0 && y < H) g[y][x] = { ch, c }; }
+function text(g, s, c, x, y) { for (let i = 0; i < s.length; i++) dot(g, s[i], c, x + i, y); }
+const esc = ch => ch === '<' ? '&lt;' : ch === '>' ? '&gt;' : ch === '&' ? '&amp;' : ch;
 
-function esc(ch) {
-  return ch === '<' ? '&lt;' : ch === '>' ? '&gt;' : ch === '&' ? '&amp;' : ch;
-}
-
-/* ---------- Kare oluşturucu ---------- */
 function build(p) {
   const g = Array.from({ length: H }, () => Array(W).fill(null));
   const legs = LEGS[p.legs];
@@ -232,68 +291,50 @@ function build(p) {
   const hy = ty - 7;
   const tx = CX - 6, hx = CX - 8;
 
-  // gölge: yükseldikçe küçülür
   const sw = Math.max(9, Math.round(29 - p.dy * 2.4));
   const left = CX - Math.floor(sw / 2);
   for (let i = 0; i < sw; i++) dot(g, (i < 2 || i >= sw - 2) ? '-' : '=', 'd', left + i, BASE);
 
-  // hareket çizgileri
-  if (p.fx === 'up') {
+  if (p.fx === 'up')
     for (const dx of [-5, 0, 5]) for (let r = 0; r < 2; r++) if (feetBottom + r < BASE) dot(g, '|', 'd', CX + dx, feetBottom + r);
-  }
-  if (p.fx === 'down') {
-    for (const dx of [-6, 0, 6]) for (let r = 0; r < 2; r++) dot(g, '|', 'd', CX + dx, hy - 1 - r);
-  }
+  if (p.fx === 'down')
+    for (const dx of [-8, 0, 8]) for (let r = 0; r < 2; r++) dot(g, '|', 'd', CX + dx, hy - 4 - r);
 
   put(g, TAIL[p.tail], tx + 13, ty + p.th - 4);
   put(g, legs, tx, ly);
   put(g, torso(p.th), tx, ty);
-
   const a = ARMS[p.arms];
   put(g, a.L, tx + a.dx, ty + a.dy);
   put(g, a.R, tx + 13, ty + a.dy);
-
   put(g, head(p.eyes[0], p.eyes[1], p.mouth), hx, hy);
   put(g, WHISK_L, hx - 3, hy + 3);
   put(g, WHISK_R, hx + 17, hy + 3);
+  put(g, HAT, CX - 12, hy - 3);
 
-  // efektler
   const dustSets = {
     launch: [[14,1,':'],[16,1,'.'],[13,2,'.']],
     land1:  [[14,1,':'],[16,1,'.'],[13,2,'.'],[17,2,'.']],
     land2:  [[17,1,'.'],[19,1,'.'],[16,2,':'],[18,3,'.'],[15,3,'.']]
   };
-  if (dustSets[p.fx]) {
-    for (const [dx, up, ch] of dustSets[p.fx]) {
-      dot(g, ch, 'd', CX - dx, BASE - up, 'd');
-      dot(g, ch, 'd', CX + dx, BASE - up, 'd');
-    }
-  }
+  if (dustSets[p.fx]) for (const [dx, up, ch] of dustSets[p.fx]) { dot(g, ch, 'd', CX - dx, BASE - up); dot(g, ch, 'd', CX + dx, BASE - up); }
   if (p.fx === 'spark1' || p.fx === 'spark2') {
     const A = p.fx === 'spark1' ? ['*','+','x','.'] : ['+','*','.','x'];
-    dot(g, A[0], 'y', CX - 15, hy + 3);
-    dot(g, A[1], 'y', CX + 16, hy + 1);
-    dot(g, A[2], 'y', CX - 11, hy - 1);
-    dot(g, A[3], 'y', CX + 12, hy - 1);
-    text(g, '<3', 'p', CX + (p.fx === 'spark1' ? 15 : 16), hy + (p.fx === 'spark1' ? 4 : 3));
+    dot(g, A[0], 'y', CX - 16, hy + 4);
+    dot(g, A[1], 'y', CX + 17, hy + 2);
+    dot(g, A[2], 'y', CX - 14, hy - 4);
+    dot(g, A[3], 'y', CX + 14, hy - 4);
+    text(g, '<3', 'p', CX + (p.fx === 'spark1' ? 15 : 16), hy + (p.fx === 'spark1' ? 5 : 4));
   }
   return g;
 }
-
 function toHTML(g) {
   let html = '';
   for (let y = 0; y < H; y++) {
     let run = '', cls = null;
     for (let x = 0; x < W; x++) {
-      const cell = g[y][x];
-      const c = cell ? cell.c : null;
-      const ch = cell ? esc(cell.ch) : ' ';
-      if (c !== cls && run) {
-        html += cls ? '<span class="' + cls + '">' + run + '</span>' : run;
-        run = '';
-      }
-      cls = c;
-      run += ch;
+      const cell = g[y][x], c = cell ? cell.c : null, ch = cell ? esc(cell.ch) : ' ';
+      if (c !== cls && run) { html += cls ? '<span class="' + cls + '">' + run + '</span>' : run; run = ''; }
+      cls = c; run += ch;
     }
     html += cls ? '<span class="' + cls + '">' + run + '</span>' : run;
     html += '\n';
@@ -301,10 +342,8 @@ function toHTML(g) {
   return html;
 }
 
-/* ---------- Zıplama dizisi ---------- */
 const O = ['0', '0'], HAP = ['^', '^'], SQ = ['>', '<'], BL = ['-', '-'];
 const SM = '\\_/', OPEN = '\\U/';
-
 const POSES = [
   { legs:'stand',   th:7, arms:'down', eyes:O,   mouth:SM,   tail:'up',   dy:0, t:260 },
   { legs:'stand',   th:7, arms:'down', eyes:BL,  mouth:SM,   tail:'out',  dy:0, t:110 },
@@ -323,24 +362,106 @@ const POSES = [
   { legs:'crouch1', th:6, arms:'down', eyes:HAP, mouth:SM,   tail:'out',  dy:0, t:100 },
   { legs:'stand',   th:7, arms:'down', eyes:HAP, mouth:SM,   tail:'up',   dy:0, t:180 }
 ];
+/* Bir zıplama = 4 vuruş olacak şekilde hızı şarkıya göre ölçekle */
+const SCALE = Math.min(1.6, Math.max(0.6, (4 * 60000 / BPM) / POSES.reduce((a, p) => a + p.t, 0)));
 
 const catEl = document.getElementById('cat');
 let idx = 0, timer = null;
-
 function draw(p) { catEl.innerHTML = toHTML(build(p)); }
-
 function tick() {
-  draw(POSES[idx]);
-  timer = setTimeout(tick, POSES[idx].t);
+  const p = POSES[idx];
+  draw(p);
+  if (p.fx === 'land1') onLand();
+  timer = setTimeout(tick, p.t * SCALE);
   idx = (idx + 1) % POSES.length;
 }
 
-if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) draw(POSES[0]);
-else tick();
+/* ---------- Başlık harfleri ---------- */
+(function splitTitle() {
+  let n = 0;
+  document.querySelectorAll('#title .word').forEach(w => {
+    const txt = w.textContent; w.textContent = ''; w.setAttribute('aria-hidden', 'true');
+    for (const ch of txt) {
+      const s = document.createElement('span'); s.className = 'ch'; s.textContent = ch;
+      s.style.animationDelay = (n * -0.22) + 's, ' + (n * 0.05) + 's';
+      w.appendChild(s); n++;
+    }
+  });
+})();
 
-/* ---------- Yükselen kalpler (arka plan) ---------- */
+/* ---------- Bayraklar ve kayan yazı ---------- */
+(function decorate() {
+  const colors = ['#ff4d8d', '#ff9f43', '#ffe34d', '#4dff9f', '#4dc8ff', '#c84dff'];
+  const b = document.getElementById('bunting');
+  for (let i = 0; i < 14; i++) {
+    const f = document.createElement('i');
+    f.style.background = colors[i % colors.length];
+    f.style.animationDelay = (i * -0.13) + 's';
+    b.appendChild(f);
+  }
+  const msg = '¡GEÇMİŞ OLSUN SEVGİLİM! ★ ¡ARRIBA! ★ ¡VIVA! ★ ÇABUK İYİLEŞ ★ ¡OLÉ! ★ ';
+  const track = document.getElementById('track');
+  for (let i = 0; i < 8; i++) { const s = document.createElement('span'); s.textContent = msg; track.appendChild(s); }
+})();
+
+/* ---------- Uçanlar ---------- */
+const FLY = ['🌮', '🌶️', '🌵', '🎸', '🎺', '🥑', '🍹', '🪅', '🌯', '🥳', '🎵', '🎶', '🧡'];
+const beatS = 60 / BPM;
+let activeFliers = 0;
+function spawnFlier() {
+  if (document.hidden || activeFliers > 10) return;
+  const el = document.createElement('div');
+  el.className = 'fly ' + (Math.random() < .5 ? 'ltr' : 'rtl');
+  el.style.top = (8 + Math.random() * 74) + 'vh';
+  el.style.fontSize = (32 + Math.random() * 46) + 'px';
+  el.style.animationDuration = (beatS * (9 + Math.random() * 9)).toFixed(2) + 's';
+  const sp = document.createElement('span');
+  sp.className = ['a-spin', 'a-wob', 'a-bnc'][Math.floor(Math.random() * 3)];
+  sp.textContent = FLY[Math.floor(Math.random() * FLY.length)];
+  el.appendChild(sp);
+  document.getElementById('fliers').appendChild(el);
+  activeFliers++;
+  el.addEventListener('animationend', () => { el.remove(); activeFliers--; });
+}
+
+/* ---------- Bağırışlar ve konfeti (her inişte) ---------- */
+const SHOUTS = ['¡OLÉ!', '¡ARRIBA!', '¡VIVA!', 'ÇABUK İYİLEŞ!', 'ANDALE ANDALE!', '¡AY CARAMBA!', 'GEÇMİŞ OLSUN!', 'SEVGİLİM!'];
+function spawnShout() {
+  const el = document.createElement('div');
+  const left = Math.random() < .5;
+  el.className = 'shout';
+  el.textContent = SHOUTS[Math.floor(Math.random() * SHOUTS.length)];
+  el.style.top = (10 + Math.random() * 52) + 'vh';
+  el.style[left ? 'left' : 'right'] = '2vw';
+  el.style.color = 'hsl(' + Math.floor(Math.random() * 360) + ',100%,68%)';
+  el.style.setProperty('--from', (left ? '-' : '') + '90vw');
+  el.style.setProperty('--r1', (left ? -18 : 18) + 'deg');
+  el.style.setProperty('--r2', (left ? 7 : -7) + 'deg');
+  document.body.appendChild(el);
+  el.addEventListener('animationend', () => el.remove());
+}
+function burst() {
+  const r = catEl.getBoundingClientRect();
+  const x = r.left + r.width / 2, y = r.top + r.height * (BASE / H);
+  for (let i = 0; i < 22; i++) {
+    const c = document.createElement('div');
+    c.className = 'conf';
+    const s = 6 + Math.random() * 7;
+    c.style.cssText = 'left:' + x + 'px;top:' + y + 'px;width:' + s + 'px;height:' + (Math.random() < .5 ? s : s * 2) + 'px;' +
+      'background:hsl(' + Math.floor(Math.random() * 360) + ',95%,62%);' + (Math.random() < .4 ? 'border-radius:50%;' : '');
+    c.style.setProperty('--dx', ((Math.random() - .5) * 2 * Math.min(innerWidth * .45, 320)) + 'px');
+    c.style.setProperty('--dy', (-(80 + Math.random() * 240)) + 'px');
+    c.style.setProperty('--rot', ((Math.random() - .5) * 1440) + 'deg');
+    document.body.appendChild(c);
+    c.addEventListener('animationend', () => c.remove());
+  }
+}
+function onLand() { if (REDUCED || !started) return; burst(); spawnShout(); }
+
+/* ---------- Kalpler ---------- */
 const symbols = ['🤍', '💗', '🩷', '✨'];
 function spawnHeart() {
+  if (document.hidden) return;
   const el = document.createElement('div');
   el.className = 'heart';
   el.textContent = symbols[Math.floor(Math.random() * symbols.length)];
@@ -351,32 +472,34 @@ function spawnHeart() {
   document.body.appendChild(el);
   el.addEventListener('animationend', () => el.remove());
 }
-if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-  setInterval(spawnHeart, 700);
-  for (let i = 0; i < 5; i++) setTimeout(spawnHeart, i * 250);
-}
 
-/* ---------- Müzik ---------- */
+/* ---------- Müzik ve başlatma ---------- */
 const bgm = document.getElementById('bgm');
 const startEl = document.getElementById('start');
 const muteBtn = document.getElementById('mute');
-bgm.volume = 0.6;
+bgm.volume = 0.7;
+let started = false;
 
-function startMusic() {
+function startAll() {
+  if (started) return;
+  started = true;
   startEl.classList.add('hide');
   bgm.play().then(() => muteBtn.classList.add('on')).catch(() => {});
+  if (!REDUCED) {
+    for (let i = 0; i < 5; i++) setTimeout(spawnFlier, i * 350);
+    setInterval(spawnFlier, 850);
+    setInterval(spawnHeart, 1400);
+  }
 }
-startEl.addEventListener('click', startMusic);
-startEl.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') startMusic(); });
-
-muteBtn.addEventListener('click', () => {
-  bgm.muted = !bgm.muted;
-  muteBtn.classList.toggle('off', bgm.muted);
-});
+startEl.addEventListener('click', startAll);
+startEl.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') startAll(); });
+muteBtn.addEventListener('click', () => { bgm.muted = !bgm.muted; muteBtn.classList.toggle('off', bgm.muted); });
 document.addEventListener('visibilitychange', () => {
   if (!muteBtn.classList.contains('on')) return;
   if (document.hidden) bgm.pause(); else bgm.play().catch(() => {});
 });
+
+if (REDUCED) draw(POSES[0]); else tick();
 </script>
 </body>
 </html>
