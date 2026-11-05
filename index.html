@@ -1,200 +1,323 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Geçmiş Olsun Sevgilim 🤍</title>
-    
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;900&display=swap" rel="stylesheet">
-    
-    <style>
-        body {
-            font-family: 'Nunito', sans-serif;
-            margin: 0;
-            overflow: hidden;
-            background-color: #0f0f13;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Geçmiş Olsun Sevgilim</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@900&display=swap" rel="stylesheet">
+<style>
+  :root { --bg: #0f0f13; --pink: #ff758c; }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; margin: 0; }
+  body {
+    font-family: 'Nunito', system-ui, sans-serif;
+    background: radial-gradient(ellipse at 50% 40%, #2a1520 0%, var(--bg) 65%);
+    color: #fff;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1vh;
+    user-select: none;
+    -webkit-user-select: none;
+  }
 
-        .ascii-art {
-            font-family: 'Courier New', Courier, monospace;
-            white-space: pre;
-            line-height: 1.1;
-            text-align: center;
-            text-shadow: 0 0 12px rgba(244, 114, 182, 0.6);
-        }
+  #cat {
+    margin: 0;
+    font-family: ui-monospace, 'SFMono-Regular', Menlo, Consolas, 'DejaVu Sans Mono', 'Courier New', monospace;
+    font-weight: 700;
+    font-size: min(1.95vh, 3.7vw);
+    line-height: 1;
+    white-space: pre;
+    text-shadow: 0 0 10px rgba(255,117,140,.35);
+  }
+  #cat .g1 { color: #b9bbc6; }
+  #cat .g2 { color: #858792; }
+  #cat .w  { color: #f7f3ef; }
+  #cat .p  { color: #ff8fab; }
+  #cat .k  { color: #d2c8d2; }
+  #cat .d  { color: #b99aa9; text-shadow: none; }
+  #cat .y  { color: #ffd37a; text-shadow: 0 0 8px rgba(255,211,122,.7); }
+  #cat .e  { color: #fff; background: #0b0b10; text-shadow: none; }
 
-        .animated-text {
-            background: linear-gradient(270deg, #ff7eb3, #ff758c, #ffb199, #ff7eb3);
-            background-size: 300% 300%;
-            animation: gradientShift 4s ease infinite;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0px 4px 10px rgba(255, 117, 140, 0.3));
-        }
+  h1 {
+    margin: 0;
+    padding: 0 16px .12em;
+    text-align: center;
+    font-weight: 900;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    font-size: clamp(2.6rem, 9vw, 6.5rem);
+    background: linear-gradient(270deg, #ff7eb3, #ff758c, #ffb199, #ff7eb3);
+    background-size: 300% 300%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: shift 5s ease infinite, pop 3.2s ease-in-out infinite;
+    filter: drop-shadow(0 4px 14px rgba(255,117,140,.35));
+  }
+  @keyframes shift { 0%,100% { background-position: 0% 50% } 50% { background-position: 100% 50% } }
+  @keyframes pop { 0%,100% { transform: scale(1) } 50% { transform: scale(1.03) } }
 
-        @keyframes gradientShift {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
+  .heart {
+    position: fixed;
+    bottom: -40px;
+    pointer-events: none;
+    color: var(--pink);
+    opacity: 0;
+    animation: rise linear forwards;
+    text-shadow: 0 0 12px rgba(255,117,140,.6);
+  }
+  @keyframes rise {
+    0% { transform: translateY(0) translateX(0) scale(.6); opacity: 0 }
+    10% { opacity: .85 }
+    100% { transform: translateY(-110vh) translateX(var(--dx)) scale(1.1); opacity: 0 }
+  }
 
-        .glow-bg {
-            position: absolute;
-            width: 60vw;
-            height: 60vh;
-            background: radial-gradient(circle, rgba(255,117,140,0.15) 0%, rgba(15,15,19,0) 70%);
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: -1;
-        }
-    </style>
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; }
+  }
+</style>
 </head>
-<body class="w-screen h-screen flex flex-col items-center justify-center relative text-white select-none">
+<body>
 
-    <div class="glow-bg"></div>
+<pre id="cat" role="img" aria-label="Zıplayan sevimli kedi"></pre>
+<h1>Geçmiş Olsun<br>Sevgilim</h1>
 
-    <div class="flex-1 flex items-end justify-center pb-8 w-full">
-        <!-- ASCII sanatı kapsayıcısı -->
-        <pre id="cat-video" class="ascii-art text-pink-300 text-xl sm:text-2xl md:text-4xl font-bold"></pre>
-    </div>
+<script>
+/* ---------- Izgara ve sabitler ---------- */
+const W = 41, H = 28;       // sütun, satır
+const CX = 20;              // kedinin yatay merkezi
+const BASE = 26;            // zemin çizgisi (ayakların altı), gölge bu satırda
 
-    <div class="flex-1 flex items-start justify-center pt-4 w-full">
-        <h1 class="text-6xl sm:text-7xl md:text-9xl font-black text-center animated-text px-4 tracking-tight leading-tight">
-            Geçmiş Olsun<br>Sevgilim
-        </h1>
-    </div>
+/* ---------- Sprite ayrıştırıcı ----------
+   {p} pembe, {e} göz, {a} otomatik (karaktere göre renk). Boşluk = saydam. */
+const AUTO = { '#':'g1','@':'g1','%':'g2','&':'g2','/':'g2','\\':'g2','|':'g2','_':'g2','-':'g2' };
 
-    <script>
-        // Tam vücut kullanan, sembollerle hacim verilmiş 10 karelik (frame) zıplama döngüsü
-        const frames = [
-// Kare 1: Çömelmiş (Hazırlık)
-`
-    
-    
-          /\\____/\\
-         {  O  O  }
-       __(   >w<  )__
-      /%@\\}======{/%@\\
-     (%@/ (#%&&%#) \\@%)
-      \\/   /@%\\ /%@\\ \\/
-          (@%/  \\%@)`,
+function parse(s) {
+  const out = [];
+  let cur = null;
+  for (let i = 0; i < s.length; i++) {
+    if (s[i] === '{') {
+      const j = s.indexOf('}', i);
+      const t = s.slice(i + 1, j);
+      cur = (t === 'a') ? null : t;
+      i = j;
+      continue;
+    }
+    out.push({ ch: s[i], c: cur || AUTO[s[i]] || 'w' });
+  }
+  return out;
+}
+const sprite = rows => rows.map(parse);
 
-// Kare 2: İtiş (Kollar bükülüyor, yükselmeye başlama)
-`
-    
-          /\\____/\\
-         {  O  O  }
-       _/(   >w<  )\\_
-      /%@/}======{\\@%\\
-     (%@/ (#%&&%#) \\@%)
-          /@%||%@\\
-         (@%/  \\%@)
-`,
+const MIRROR = { '/':'\\', '\\':'/', '(':')', ')':'(', '<':'>', '>':'<' };
+const mirror = rows => rows.map(r => r.slice().reverse().map(c => ({ ch: MIRROR[c.ch] || c.ch, c: c.c })));
 
-// Kare 3: Havalanma (Kollar ve bacaklar geriye)
-`       \\%@/          \\@%/
-        \\%@\\ /\\____/\\ /@%/
-         \\%/{  O  O  }\\%/
-           (   >w<  )
-           }======{
-           (#%&&%#)
-          /@%/  \\%@\\
-         (@%/    \\%@)
-`,
+/* ---------- Parçalar ---------- */
+function head(eL, eR, m) {
+  return sprite([
+    "  /\\         /\\  ",
+    " /{p}##{a}\\_______/{p}##{a}\\ ",
+    "|#%#%#%ooo%#%#%#|",
+    "|#%{e}" + eL + "{a}%#ooooo#%{e}" + eR + "{a}%#|",
+    "|#{p}*{a}%#%oo{p}v{a}oo#%#{p}*{a}%|",
+    " \\%#%#o{p}" + m + "{a}o#%#%/ ",
+    "  \\___________/  "
+  ]);
+}
 
-// Kare 4: Zirve (İkonik poz - Tam açık kollar bacaklar)
-`       \\%@/   /\\____/\\   \\@%/
-        \\%@\\ {  O  O  } /@%/
-         \\%@\\(   >w<  )/@%/
-          \\%@\\}======{/@%/
-           \\%@(#%&&%#)@%/
-           /@%/      \\%@\\
-          /@%/        \\%@\\
-         (@%/          \\%@)
-`,
+function torso(n) {
+  const f = (i, len) => { let s = ''; for (let k = 0; k < len; k++) s += ((i + k) % 2 ? '%' : '#'); return s; };
+  const rows = [];
+  rows.push("/" + f(0, 3) + "ooooo" + f(1, 3) + "\\");
+  for (let i = 0; i < n - 3; i++) rows.push("|" + f(i, 3) + "ooooo" + f(i + 1, 3) + "|");
+  rows.push("\\" + f(1, 3) + "ooooo" + f(0, 3) + "/");
+  rows.push(" \\_________/ ");
+  return sprite(rows);
+}
 
-// Kare 5: Düşüşe geçiş
-`
-        \\%@/  /\\____/\\  \\@%/
-         \\%@\\{  O  O  }/@%/
-          \\%@(   >w<  )@%/
-            \\}======{/
-            (#%&&%#)
-           /@%/    \\%@\\
-          (@%/      \\%@)
-`,
+const LEGS = {
+  stand:   sprite(["  |#|   |#|  ", "  |%|   |%|  ", " (ooo) (ooo) "]),
+  crouch1: sprite(["  /#\\   /#\\  ", "(ooo)   (ooo)"]),
+  crouch2: sprite(["(ooo)   (ooo)"]),
+  extend:  sprite(["  |#|   |#|  ", "  |%|   |%|  ", "  \\o/   \\o/  "]),
+  split:   sprite(["  /#|   |#\\  ", " /#/     \\#\\ ", "(o/       \\o)"]),
+  tuck:    sprite([" /##\\   /##\\ ", "(ooo)   (ooo)"])
+};
 
-// Kare 6: Yere ilk temas
-`
-    
-          /\\____/\\
-       \\_/{  O  O  }\\_/
-      /%@/(   >w<  )\\@%\\
-     (%@/ }======{ \\@%)
-         /(#%&&%#)\\
-        /@%/    \\%@\\
-       (@%/      \\%@)`,
+const ARMS = {
+  down: { L: sprite(["#%", "%#", "#%", "oo"]), dx: -2, dy: 1 },
+  up:   { L: sprite(["oo   ", " #%  ", "  %# ", "   #%"]), dx: -5, dy: -2 },
+  out:  { L: sprite(["oo%#%", "  #%#"]), dx: -5, dy: 1 }
+};
+for (const k in ARMS) ARMS[k].R = mirror(ARMS[k].L);
 
-// Kare 7: Esneme ve Ezilme (Darbe emilimi, yüz ifadesi değişir)
-`
-    
-    
-          /\\____/\\
-       __/{ >  <  }\\__
-      /%@/(   -w-  )\\@%\\
-     (%@/ }======{ \\@%)
-      \\/ /(#%&&%#)\\ \\/
-        (@%/    \\%@)
-`,
+const TAIL = {
+  up:   sprite(["   OO", "  %#", " #%", "%#"]),
+  out:  sprite(["", "    OO", " %#%# ", "%#%"]),
+  down: sprite(["", "", "", "%#%#%OO"])
+};
 
-// Kare 8: Sola doğru kıvırtma / denge
-`
-    
-           /\\____/\\
-      \\%@/{  O  O  }
-       \\%@(   >w<  )\\@%\\
-         \\}======{ \\@%)
-         (#%&&%#)  \\/
-        /@%/  \\%@\\
-       (@%/    \\%@)`,
+const WHISK_L = sprite(["==-", "~=-"]).map(r => r.map(c => ({ ch: c.ch, c: 'k' })));
+const WHISK_R = sprite(["-==", "-=~"]).map(r => r.map(c => ({ ch: c.ch, c: 'k' })));
 
-// Kare 9: Sağa doğru kıvırtma / denge
-`
-    
-          /\\____/\\
-         {  O  O  }/@%/
-      /%@\\(   >w<  )@%/
-     (%@/ }======{/
-      \\/  (#%&&%#)
-         /@%/  \\%@\\
-        (@%/    \\%@)`,
+/* ---------- Çizim yardımcıları ---------- */
+function put(g, spr, x, y) {
+  for (let r = 0; r < spr.length; r++)
+    for (let c = 0; c < spr[r].length; c++) {
+      const cell = spr[r][c];
+      const gx = x + c, gy = y + r;
+      if (cell.ch !== ' ' && gy >= 0 && gy < H && gx >= 0 && gx < W) g[gy][gx] = cell;
+    }
+}
+function dot(g, ch, c, x, y) {
+  if (x >= 0 && x < W && y >= 0 && y < H) g[y][x] = { ch, c };
+}
+function text(g, s, c, x, y) {
+  for (let i = 0; i < s.length; i++) dot(g, s[i], c, x + i, y);
+}
 
-// Kare 10: Son toparlanma ve gözleri kısarak tekrar hazırlık
-`
-    
-          /\\____/\\
-         {  ^  ^  }
-       _/(   >w<  )\\_
-      /%@/}======{\\@%\\
-     (%@/ (#%&&%#) \\@%)
-      \\/   /@%\\ /%@\\ \\/
-          (@%/  \\%@)`
-        ];
+function esc(ch) {
+  return ch === '<' ? '&lt;' : ch === '>' ? '&gt;' : ch === '&' ? '&amp;' : ch;
+}
 
-        let currentFrame = 0;
-        const catElement = document.getElementById('cat-video');
+/* ---------- Kare oluşturucu ---------- */
+function build(p) {
+  const g = Array.from({ length: H }, () => Array(W).fill(null));
+  const legs = LEGS[p.legs];
+  const feetBottom = BASE - p.dy;
+  const ly = feetBottom - legs.length;
+  const ty = ly - p.th;
+  const hy = ty - 7;
+  const tx = CX - 6, hx = CX - 8;
 
-        // Kare sayısını 10'a çıkardığımız için hızı saniyede ~11 kare olacak şekilde (90ms) ayarladık
-        // Bu sayede zıplama ve yere düşme çok akıcı ve enerjik görünecek
-        setInterval(() => {
-            catElement.textContent = frames[currentFrame];
-            currentFrame = (currentFrame + 1) % frames.length;
-        }, 90); 
-    </script>
+  // gölge: yükseldikçe küçülür
+  const sw = Math.max(9, Math.round(29 - p.dy * 2.4));
+  const left = CX - Math.floor(sw / 2);
+  for (let i = 0; i < sw; i++) dot(g, (i < 2 || i >= sw - 2) ? '-' : '=', 'd', left + i, BASE);
 
+  // hareket çizgileri
+  if (p.fx === 'up') {
+    for (const dx of [-5, 0, 5]) for (let r = 0; r < 2; r++) if (feetBottom + r < BASE) dot(g, '|', 'd', CX + dx, feetBottom + r);
+  }
+  if (p.fx === 'down') {
+    for (const dx of [-6, 0, 6]) for (let r = 0; r < 2; r++) dot(g, '|', 'd', CX + dx, hy - 1 - r);
+  }
+
+  put(g, TAIL[p.tail], tx + 13, ty + p.th - 4);
+  put(g, legs, tx, ly);
+  put(g, torso(p.th), tx, ty);
+
+  const a = ARMS[p.arms];
+  put(g, a.L, tx + a.dx, ty + a.dy);
+  put(g, a.R, tx + 13, ty + a.dy);
+
+  put(g, head(p.eyes[0], p.eyes[1], p.mouth), hx, hy);
+  put(g, WHISK_L, hx - 3, hy + 3);
+  put(g, WHISK_R, hx + 17, hy + 3);
+
+  // efektler
+  const dustSets = {
+    launch: [[14,1,':'],[16,1,'.'],[13,2,'.']],
+    land1:  [[14,1,':'],[16,1,'.'],[13,2,'.'],[17,2,'.']],
+    land2:  [[17,1,'.'],[19,1,'.'],[16,2,':'],[18,3,'.'],[15,3,'.']]
+  };
+  if (dustSets[p.fx]) {
+    for (const [dx, up, ch] of dustSets[p.fx]) {
+      dot(g, ch, 'd', CX - dx, BASE - up, 'd');
+      dot(g, ch, 'd', CX + dx, BASE - up, 'd');
+    }
+  }
+  if (p.fx === 'spark1' || p.fx === 'spark2') {
+    const A = p.fx === 'spark1' ? ['*','+','x','.'] : ['+','*','.','x'];
+    dot(g, A[0], 'y', CX - 15, hy + 3);
+    dot(g, A[1], 'y', CX + 16, hy + 1);
+    dot(g, A[2], 'y', CX - 11, hy - 1);
+    dot(g, A[3], 'y', CX + 12, hy - 1);
+    text(g, '<3', 'p', CX + (p.fx === 'spark1' ? 15 : 16), hy + (p.fx === 'spark1' ? 4 : 3));
+  }
+  return g;
+}
+
+function toHTML(g) {
+  let html = '';
+  for (let y = 0; y < H; y++) {
+    let run = '', cls = null;
+    for (let x = 0; x < W; x++) {
+      const cell = g[y][x];
+      const c = cell ? cell.c : null;
+      const ch = cell ? esc(cell.ch) : ' ';
+      if (c !== cls && run) {
+        html += cls ? '<span class="' + cls + '">' + run + '</span>' : run;
+        run = '';
+      }
+      cls = c;
+      run += ch;
+    }
+    html += cls ? '<span class="' + cls + '">' + run + '</span>' : run;
+    html += '\n';
+  }
+  return html;
+}
+
+/* ---------- Zıplama dizisi ---------- */
+const O = ['0', '0'], HAP = ['^', '^'], SQ = ['>', '<'], BL = ['-', '-'];
+const SM = '\\_/', OPEN = '\\U/';
+
+const POSES = [
+  { legs:'stand',   th:7, arms:'down', eyes:O,   mouth:SM,   tail:'up',   dy:0, t:260 },
+  { legs:'stand',   th:7, arms:'down', eyes:BL,  mouth:SM,   tail:'out',  dy:0, t:110 },
+  { legs:'crouch1', th:6, arms:'down', eyes:O,   mouth:SM,   tail:'out',  dy:0, t:110 },
+  { legs:'crouch2', th:5, arms:'down', eyes:SQ,  mouth:SM,   tail:'down', dy:0, t:150 },
+  { legs:'extend',  th:7, arms:'up',   eyes:HAP, mouth:OPEN, tail:'out',  dy:2, t:70,  fx:'launch' },
+  { legs:'extend',  th:7, arms:'up',   eyes:HAP, mouth:OPEN, tail:'down', dy:5, t:65,  fx:'up' },
+  { legs:'split',   th:7, arms:'up',   eyes:HAP, mouth:OPEN, tail:'down', dy:7, t:70,  fx:'spark1' },
+  { legs:'split',   th:7, arms:'out',  eyes:HAP, mouth:OPEN, tail:'up',   dy:8, t:110, fx:'spark2' },
+  { legs:'tuck',    th:7, arms:'out',  eyes:HAP, mouth:OPEN, tail:'up',   dy:8, t:110, fx:'spark1' },
+  { legs:'split',   th:7, arms:'out',  eyes:HAP, mouth:SM,   tail:'out',  dy:6, t:70,  fx:'spark2' },
+  { legs:'extend',  th:7, arms:'down', eyes:O,   mouth:OPEN, tail:'up',   dy:4, t:65,  fx:'down' },
+  { legs:'extend',  th:7, arms:'down', eyes:SQ,  mouth:SM,   tail:'up',   dy:2, t:65,  fx:'down' },
+  { legs:'crouch2', th:5, arms:'out',  eyes:SQ,  mouth:SM,   tail:'out',  dy:0, t:120, fx:'land1' },
+  { legs:'crouch2', th:4, arms:'out',  eyes:SQ,  mouth:SM,   tail:'down', dy:0, t:120, fx:'land2' },
+  { legs:'crouch1', th:6, arms:'down', eyes:HAP, mouth:SM,   tail:'out',  dy:0, t:100 },
+  { legs:'stand',   th:7, arms:'down', eyes:HAP, mouth:SM,   tail:'up',   dy:0, t:180 }
+];
+
+const catEl = document.getElementById('cat');
+let idx = 0, timer = null;
+
+function draw(p) { catEl.innerHTML = toHTML(build(p)); }
+
+function tick() {
+  draw(POSES[idx]);
+  timer = setTimeout(tick, POSES[idx].t);
+  idx = (idx + 1) % POSES.length;
+}
+
+if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) draw(POSES[0]);
+else tick();
+
+/* ---------- Yükselen kalpler (arka plan) ---------- */
+const symbols = ['🤍', '💗', '🩷', '✨'];
+function spawnHeart() {
+  const el = document.createElement('div');
+  el.className = 'heart';
+  el.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+  el.style.left = Math.random() * 100 + 'vw';
+  el.style.fontSize = (14 + Math.random() * 22) + 'px';
+  el.style.setProperty('--dx', (Math.random() * 80 - 40) + 'px');
+  el.style.animationDuration = (5 + Math.random() * 4) + 's';
+  document.body.appendChild(el);
+  el.addEventListener('animationend', () => el.remove());
+}
+if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  setInterval(spawnHeart, 700);
+  for (let i = 0; i < 5; i++) setTimeout(spawnHeart, i * 250);
+}
+</script>
 </body>
 </html>
