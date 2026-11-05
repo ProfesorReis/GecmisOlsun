@@ -58,8 +58,8 @@
     <div class="glow-bg"></div>
 
     <div class="flex-1 flex items-end justify-center pb-8 w-full">
-        <!-- Kedinin boyutunu mobilde ve masaüstünde güzel duracak şekilde ayarladık -->
-        <pre id="cat-video" class="ascii-art text-pink-300 text-2xl sm:text-3xl md:text-5xl font-bold"></pre>
+        <!-- ASCII sanatı kapsayıcısı -->
+        <pre id="cat-video" class="ascii-art text-pink-300 text-xl sm:text-2xl md:text-4xl font-bold"></pre>
     </div>
 
     <div class="flex-1 flex items-start justify-center pt-4 w-full">
@@ -69,50 +69,131 @@
     </div>
 
     <script>
-        // 4 Karelik daha akıcı bir animasyon döngüsü (Çömelme -> Yükselme -> Havada -> İniş)
+        // Tam vücut kullanan, sembollerle hacim verilmiş 10 karelik (frame) zıplama döngüsü
         const frames = [
-            // Kare 1: Yerde çömelmiş, zıplamaya hazırlık
-            `
-     /\\___/\\
-    (  o_o  )
-  --(       )--
-    /       \\
-   /         \\
-            `,
-            // Kare 2: Kollar ve bacaklar toplanarak yukarı doğru itiş (Yükselme)
-            `
-     /\\___/\\
-    (  o_o  )
-   / (     ) \\
-     |     |
-     |     |
-            `,
-            // Kare 3: Kollar ve bacaklar tam açık, havada (Klasik Happy Cat pozu)
-            `
- \\  /\\___/\\  /
-  \\(  o_o  )/
-   (       )
-    \\     /
-    /     \\
-            `,
-            // Kare 4: Yere doğru düşerken kollar ve bacaklar hafif kapanıyor (İniş)
-            `
-     /\\___/\\
-    (  o_o  )
-   / (     ) \\
-     /     \\
-    /       \\
-            `
+// Kare 1: Çömelmiş (Hazırlık)
+`
+    
+    
+          /\\____/\\
+         {  O  O  }
+       __(   >w<  )__
+      /%@\\}======{/%@\\
+     (%@/ (#%&&%#) \\@%)
+      \\/   /@%\\ /%@\\ \\/
+          (@%/  \\%@)`,
+
+// Kare 2: İtiş (Kollar bükülüyor, yükselmeye başlama)
+`
+    
+          /\\____/\\
+         {  O  O  }
+       _/(   >w<  )\\_
+      /%@/}======{\\@%\\
+     (%@/ (#%&&%#) \\@%)
+          /@%||%@\\
+         (@%/  \\%@)
+`,
+
+// Kare 3: Havalanma (Kollar ve bacaklar geriye)
+`       \\%@/          \\@%/
+        \\%@\\ /\\____/\\ /@%/
+         \\%/{  O  O  }\\%/
+           (   >w<  )
+           }======{
+           (#%&&%#)
+          /@%/  \\%@\\
+         (@%/    \\%@)
+`,
+
+// Kare 4: Zirve (İkonik poz - Tam açık kollar bacaklar)
+`       \\%@/   /\\____/\\   \\@%/
+        \\%@\\ {  O  O  } /@%/
+         \\%@\\(   >w<  )/@%/
+          \\%@\\}======{/@%/
+           \\%@(#%&&%#)@%/
+           /@%/      \\%@\\
+          /@%/        \\%@\\
+         (@%/          \\%@)
+`,
+
+// Kare 5: Düşüşe geçiş
+`
+        \\%@/  /\\____/\\  \\@%/
+         \\%@\\{  O  O  }/@%/
+          \\%@(   >w<  )@%/
+            \\}======{/
+            (#%&&%#)
+           /@%/    \\%@\\
+          (@%/      \\%@)
+`,
+
+// Kare 6: Yere ilk temas
+`
+    
+          /\\____/\\
+       \\_/{  O  O  }\\_/
+      /%@/(   >w<  )\\@%\\
+     (%@/ }======{ \\@%)
+         /(#%&&%#)\\
+        /@%/    \\%@\\
+       (@%/      \\%@)`,
+
+// Kare 7: Esneme ve Ezilme (Darbe emilimi, yüz ifadesi değişir)
+`
+    
+    
+          /\\____/\\
+       __/{ >  <  }\\__
+      /%@/(   -w-  )\\@%\\
+     (%@/ }======{ \\@%)
+      \\/ /(#%&&%#)\\ \\/
+        (@%/    \\%@)
+`,
+
+// Kare 8: Sola doğru kıvırtma / denge
+`
+    
+           /\\____/\\
+      \\%@/{  O  O  }
+       \\%@(   >w<  )\\@%\\
+         \\}======{ \\@%)
+         (#%&&%#)  \\/
+        /@%/  \\%@\\
+       (@%/    \\%@)`,
+
+// Kare 9: Sağa doğru kıvırtma / denge
+`
+    
+          /\\____/\\
+         {  O  O  }/@%/
+      /%@\\(   >w<  )@%/
+     (%@/ }======{/
+      \\/  (#%&&%#)
+         /@%/  \\%@\\
+        (@%/    \\%@)`,
+
+// Kare 10: Son toparlanma ve gözleri kısarak tekrar hazırlık
+`
+    
+          /\\____/\\
+         {  ^  ^  }
+       _/(   >w<  )\\_
+      /%@/}======{\\@%\\
+     (%@/ (#%&&%#) \\@%)
+      \\/   /@%\\ /%@\\ \\/
+          (@%/  \\%@)`
         ];
 
         let currentFrame = 0;
         const catElement = document.getElementById('cat-video');
 
-        // Animasyon hızı 120ms (saniyede yaklaşık 8 kare), daha akıcı bir zıplama sağlar
+        // Kare sayısını 10'a çıkardığımız için hızı saniyede ~11 kare olacak şekilde (90ms) ayarladık
+        // Bu sayede zıplama ve yere düşme çok akıcı ve enerjik görünecek
         setInterval(() => {
             catElement.textContent = frames[currentFrame];
             currentFrame = (currentFrame + 1) % frames.length;
-        }, 120); 
+        }, 90); 
     </script>
 
 </body>
