@@ -77,12 +77,49 @@
     100% { transform: translateY(-110vh) translateX(var(--dx)) scale(1.1); opacity: 0 }
   }
 
+
+  #start {
+    position: fixed; inset: 0; z-index: 50;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 22px;
+    background: radial-gradient(ellipse at 50% 40%, #2a1520 0%, #0f0f13 70%);
+    cursor: pointer; transition: opacity .6s ease, visibility .6s;
+  }
+  #start.hide { opacity: 0; visibility: hidden; }
+  #start .big {
+    font-weight: 900; font-size: clamp(1.6rem, 6vw, 3rem); text-align: center; padding: 0 20px; line-height: 1.15;
+    background: linear-gradient(270deg, #ff7eb3, #ff758c, #ffb199, #ff7eb3); background-size: 300% 300%;
+    -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+    animation: shift 5s ease infinite;
+  }
+  #start .btn {
+    font: 900 1.1rem 'Nunito', system-ui, sans-serif; color: #fff; letter-spacing: .04em;
+    padding: 14px 34px; border-radius: 999px; border: 2px solid rgba(255,117,140,.7);
+    background: rgba(255,117,140,.12); box-shadow: 0 0 24px rgba(255,117,140,.35);
+    animation: beat 1.6s ease-in-out infinite;
+  }
+  @keyframes beat { 0%,100% { transform: scale(1) } 50% { transform: scale(1.06) } }
+  #mute {
+    position: fixed; right: 16px; bottom: 16px; z-index: 40;
+    width: 44px; height: 44px; border-radius: 50%; cursor: pointer;
+    border: 1.5px solid rgba(255,117,140,.6); background: rgba(15,15,19,.6); color: #ff9db4;
+    font: 900 18px ui-monospace, Menlo, Consolas, monospace; display: none;
+  }
+  #mute.on { display: block; }
+  #mute.off { color: #7d6a74; border-color: rgba(255,255,255,.2); }
+
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation: none !important; }
   }
 </style>
 </head>
 <body>
+
+<div id="start" role="button" tabindex="0">
+  <div class="big">Sevgilim, sana küçük<br>bir sürprizim var</div>
+  <div class="btn">Dokun ve aç</div>
+</div>
+<button id="mute" aria-label="Sesi aç/kapat">&#9835;</button>
+<audio id="bgm" src="sarki.mp3" loop preload="auto"></audio>
 
 <pre id="cat" role="img" aria-label="Zıplayan sevimli kedi"></pre>
 <h1>Geçmiş Olsun<br>Sevgilim</h1>
@@ -318,6 +355,28 @@ if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
   setInterval(spawnHeart, 700);
   for (let i = 0; i < 5; i++) setTimeout(spawnHeart, i * 250);
 }
+
+/* ---------- Müzik ---------- */
+const bgm = document.getElementById('bgm');
+const startEl = document.getElementById('start');
+const muteBtn = document.getElementById('mute');
+bgm.volume = 0.6;
+
+function startMusic() {
+  startEl.classList.add('hide');
+  bgm.play().then(() => muteBtn.classList.add('on')).catch(() => {});
+}
+startEl.addEventListener('click', startMusic);
+startEl.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') startMusic(); });
+
+muteBtn.addEventListener('click', () => {
+  bgm.muted = !bgm.muted;
+  muteBtn.classList.toggle('off', bgm.muted);
+});
+document.addEventListener('visibilitychange', () => {
+  if (!muteBtn.classList.contains('on')) return;
+  if (document.hidden) bgm.pause(); else bgm.play().catch(() => {});
+});
 </script>
 </body>
 </html>
