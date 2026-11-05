@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Geçmiş Olsun Esma 🤍</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;900&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Nunito', sans-serif;
+            margin: 0;
+            overflow: hidden;
+            background-color: #0f0f13;
+        }
+
+        .ascii-art {
+            font-family: 'Courier New', Courier, monospace;
+            white-space: pre;
+            line-height: 1.1;
+            text-align: center;
+            text-shadow: 0 0 10px rgba(244, 114, 182, 0.5);
+        }
+
+        .animated-text {
+            background: linear-gradient(270deg, #ff7eb3, #ff758c, #ffb199, #ff7eb3);
+            background-size: 300% 300%;
+            animation: gradientShift 4s ease infinite;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0px 4px 10px rgba(255, 117, 140, 0.3));
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .glow-bg {
+            position: absolute;
+            width: 60vw;
+            height: 60vh;
+            background: radial-gradient(circle, rgba(255,117,140,0.1) 0%, rgba(15,15,19,0) 70%);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: -1;
+        }
+    </style>
+</head>
+<body class="w-screen h-screen flex flex-col items-center justify-center relative text-white select-none">
+
+    <div class="glow-bg"></div>
+
+    <div class="flex-1 flex items-end justify-center pb-8 w-full">
+        <pre id="cat-video" class="ascii-art text-pink-300 text-2xl sm:text-3xl md:text-5xl font-bold"></pre>
+    </div>
+
+    <div class="flex-1 flex items-start justify-center pt-4 w-full">
+        <h1 class="text-6xl sm:text-7xl md:text-9xl font-black text-center animated-text px-4 tracking-tight">
+            Geçmiş Olsun<br>Esma
+        </h1>
+    </div>
+
+    <script>
+        // Gönderdiğin resimdeki zıplayan kedi pozisyonları
+        const frames = [
+            `
+  \\  /\\___/\\  /
+   \\(  o_o  )/
+    (       )
+     |     |
+     |     |
+            `,
+            `
+
+     /\\___/\\
+    (  o_o  )
+  --(       )--
+    /       \\
+   /         \\
+            `
+        ];
+
+        let currentFrame = 0;
+        const catElement = document.getElementById('cat-video');
+
+        // 150ms'de bir kare değiştirerek zıplama ve kolları çırpma animasyonu
+        setInterval(() => {
+            catElement.textContent = frames[currentFrame];
+            currentFrame = (currentFrame + 1) % frames.length;
+        }, 150); 
+    </script>
+
+</body>
+</html>
